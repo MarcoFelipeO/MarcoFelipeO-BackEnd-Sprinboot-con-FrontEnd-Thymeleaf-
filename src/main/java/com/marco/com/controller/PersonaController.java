@@ -5,10 +5,7 @@ import com.marco.com.service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,6 +37,26 @@ public class PersonaController {
     public String guardarNuevaPersona(@ModelAttribute Persona persona){
     personaService.crearPersona(persona);
     return "redirect:/personas";
+    }
+
+
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEditarPersona(@PathVariable Long id,@ModelAttribute Persona persona, Model model){
+        model.addAttribute("persona", persona);
+        model.addAttribute("accion", "/personas/editar/"+id);
+        return "formulario";
+    }
+
+    @PostMapping("/editar/{id}")
+    public String actualizarPersona(@PathVariable Long id, @ModelAttribute Persona persona){
+            personaService.actualizarPersona(id, persona);
+            return "redirect:/personas";
+    }
+
+    @GetMapping("/eliminar/{id}")
+    public String eliminarPersona(@PathVariable Long id){
+        personaService.eliminarPersona(id);
+        return "redirect:/personas";
     }
 
 }
